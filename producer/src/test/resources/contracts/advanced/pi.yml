@@ -1,0 +1,11 @@
+description: pi test
+name: pi test
+request:
+  method: GET
+  url: /advanced-calculate/pi
+response:
+  headers:
+    Content-Type: application/json
+  status: 200
+  body:
+    value: 3.141592653589793

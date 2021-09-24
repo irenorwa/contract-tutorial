@@ -1,0 +1,14 @@
+description: add test
+name: add 1 to 2
+request:
+  method: GET
+  url: /calculate/add
+  queryParameters:
+    first: 1.0
+    second: 2.0
+response:
+  headers:
+    Content-Type: application/json
+  status: 200
+  body:
+      value: 3.0

@@ -1,0 +1,29 @@
+version: '3.7'
+services:
+  db:
+    hostname: db
+    image: postgres:12.5-alpine
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=pact
+
+  pact-broker:
+    image: pactfoundation/pact-broker:2.86.0.0
+    ports:
+      - 9292:9292
+    environment:
+      - PACT_BROKER_DATABASE_ADAPTER=postgres
+      - PACT_BROKER_DATABASE_USERNAME=postgres
+      - PACT_BROKER_DATABASE_PASSWORD=password
+      - PACT_BROKER_DATABASE_HOST=db
+      - PACT_BROKER_DATABASE_NAME=pact
+      - PACT_BROKER_DATABASE_PORT=5432
+    depends_on:
+      - db
+

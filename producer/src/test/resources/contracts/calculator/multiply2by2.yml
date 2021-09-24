@@ -1,0 +1,18 @@
+description: add test
+name: multiply 2 by 2
+request:
+  method: GET
+  url: /calculate/multiply
+  queryParameters:
+    first: 2.0
+    second: 2.0
+response:
+  headers:
+    Content-Type: application/json
+  status: 200
+  body:
+    value: 4.0
+  matchers:
+    headers:
+      - key: Content-Type
+        regex: "application/json.*"

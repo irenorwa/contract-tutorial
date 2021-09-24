@@ -1,0 +1,14 @@
+description: add test
+name: divide 4 by 2
+request:
+  method: GET
+  url: /calculate/divide
+  queryParameters:
+    first: 4.0
+    second: 2.0
+response:
+  headers:
+    Content-Type: application/json
+  status: 200
+  body:
+      value: 2.0

@@ -1,0 +1,14 @@
+description: add test
+name: multiply 4 by pi
+request:
+  method: GET
+  url: /calculate/multiply
+  queryParameters:
+    first: 3.141592653589793
+    second: 4.0
+response:
+  headers:
+    Content-Type: application/json
+  status: 200
+  body:
+      value: 12.566370614359172

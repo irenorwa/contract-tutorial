@@ -1,0 +1,100 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id "org.springframework.cloud.contract" version '3.0.3'
+    id 'maven-publish'
+}
+
+group = 'com.ck.lab'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    compileOnly 'org.projectlombok:lombok'
+
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
+    testImplementation(group: 'org.springframework.cloud', name: 'spring-cloud-stream', classifier: 'test-binder')
+    testImplementation('javax.inject:javax.inject:1')
+
+//    testImplementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
+    // example with adding Spock core and Spock Spring
+//    testImplementation "org.spockframework:spock-core:${spockVersion}"
+//    testImplementation "org.spockframework:spock-spring:${spockVersion}"
+//    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
+
+    testImplementation('org.junit.jupiter:junit-jupiter-api')
+    testImplementation('org.junit.jupiter:junit-jupiter-engine')
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+contracts {
+    testFramework = 'JUNIT5'
+//    packageWithBaseClasses = 'com.ck.lab.contracttutorial'
+//    convertToYaml=true
+    baseClassForTests="com.ck.lab.contracttutorial.caclulator.ContractBase"
+    baseClassMappings {
+        baseClassMapping(".*calculator.*": "com.ck.lab.contracttutorial.contract.CalculatorBase")
+        baseClassMapping(".*advanced.*":   "com.ck.lab.contracttutorial.contract.AdvancedBase")
+    }
+}
+//
+contractTest {
+    useJUnitPlatform()
+    testLogging {
+        exceptionFormat = 'full'
+    }
+    afterSuite { desc, result ->
+        if (!desc.parent) {
+            println "Results: (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+            boolean skipTests = Boolean.parseBoolean(project.findProperty('SKIP_TESTS') ?: "false")
+            if (result.testCount == 0 && !skipTests) {
+                throw new IllegalStateException("No tests were found. Failing the build")
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact bootJar
+            artifact verifierStubsJar
+
+            // https://github.com/spring-gradle-plugins/dependency-management-plugin/issues/273
+            versionMapping {
+                usage("java-api") {
+                    fromResolutionOf("runtimeClasspath")
+                }
+                usage("java-runtime") {
+                    fromResolutionResult()
+                }
+            }
+        }
+    }
+}

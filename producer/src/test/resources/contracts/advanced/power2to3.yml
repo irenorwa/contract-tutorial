@@ -1,0 +1,14 @@
+description: power test
+name: power 2 to 3
+request:
+  method: GET
+  url: /advanced-calculate/power
+  queryParameters:
+    base: 2.0
+    exponent: 3.0
+response:
+  status: 200
+  headers:
+    Content-Type: application/json
+  body:
+      value: 8.0
