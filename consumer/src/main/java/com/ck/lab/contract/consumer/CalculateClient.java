@@ -1,6 +1,10 @@
 package com.ck.lab.contract.consumer;
 
+import feign.HeaderMap;
+import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,8 +18,8 @@ public interface CalculateClient {
   @RequestMapping(method = RequestMethod.GET, value = "/calculate/subtract")
   Result subtract(@RequestParam("first") Double first,@RequestParam("second")  Double second);
 
-  @RequestMapping(method = RequestMethod.GET, value = "/calculate/multiply")
-  Result multiply(@RequestParam("first") Double first,@RequestParam("second")  Double second);
+  @GetMapping("/calculate/multiply")
+  Result multiply(@RequestParam("first") Double first, @RequestParam("second")  Double second);
 
   @RequestMapping(method = RequestMethod.GET, value = "/calculate/divide")
   Result divide(@RequestParam("first") Double first,@RequestParam("second")  Double second);

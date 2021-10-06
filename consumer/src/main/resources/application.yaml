@@ -1,2 +1,18 @@
 server:
   port: 8080
+
+pactbroker:
+  host: "localhost"
+  port: "9292"
+  protocol: "http"
+  auth:
+    username: "pact_workshop"
+    password: "pact_workshop"
+
+feign:
+  client:
+    config:
+      calculator:
+        loggerLevel: FULL
+        defaultRequestHeaders:
+          header: "Content-Type: application/json"
